@@ -1,32 +1,31 @@
 // Isla Kim
-// I put Korean comments too to understand more easily since Korean is the most comfortable language for me
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_PIECES 100 // 가격표 최대 개수 (Maximum number of price entries)
+#define MAX_PIECES 100 
 
-// 조각 정보를 저장할 구조체 (Structure to store piece information)
+// Structure to store piece information
 typedef struct {
     int length;  
     int value;
-    double ratio; // 길이당 가치 (Value per length)
+    double ratio; // Value per length
 } Piece; 
 
-// 표준 입력에서 "길이, 가치" 읽기 (Read "length, value" from standard input)
+// Read "length, value" from standard input
 void readStandardInput(Piece pieces[], int *line_count) {
     while (scanf("%d, %d", &pieces[*line_count].length, &pieces[*line_count].value) != EOF) {
-        pieces[*line_count].ratio = (double)pieces[*line_count].value / pieces[*line_count].length; // 단위 길이당 가치 계산 (Calculate value per length)
+        pieces[*line_count].ratio = (double)pieces[*line_count].value / pieces[*line_count].length; // Calculate value per length
         (*line_count)++;
 
-        // 최대 개수 초과 방지 (Prevent exceeding the maximum number of entries)
+        // Prevent exceeding the maximum number of entries
         if (*line_count >= MAX_PIECES) {
             break;
         }  
     }
 }
 
-// 단위 길이당 가치 기준으로 내림차순 정렬 (Sort in descending order based on value per length)
+// Sort in descending order based on value per length
 void sortCombination(Piece pieces[], int line_count) {
     for (int i = 0; i < line_count - 1; i++) {
         for (int j = i + 1; j < line_count; j++) {
@@ -39,15 +38,15 @@ void sortCombination(Piece pieces[], int line_count) {
     }
 }
 
-// 막대 자르기 (가치가 높은 조각부터 선택) (Cut the rod, selecting the highest-value pieces first)
+// Cut the rod, selecting the highest-value pieces first
 void cutRod(Piece pieces[], int line_count, int rod_length) {
     int total_value = 0;  
-    int remainder = rod_length; // 남은 길이 (Remaining length)
+    int remainder = rod_length; // Remaining length
 
     for (int i = 0; i < line_count; i++) {
         if (remainder <= 0) break; 
 
-        int num_pieces = remainder / pieces[i].length; // 해당 길이로 자를 수 있는 개수 (Number of pieces that can be cut)
+        int num_pieces = remainder / pieces[i].length; // Number of pieces that can be cut
 
         if (num_pieces > 0) {
             printf("%d @ %d = %d\n", num_pieces, pieces[i].length, num_pieces * pieces[i].value);
@@ -56,21 +55,21 @@ void cutRod(Piece pieces[], int line_count, int rod_length) {
         }
     }
 
-    // 최종 결과 출력 (Print final result)
+    // Print final result
     printf("Remainder: %d\n", remainder);
     printf("Value: %d\n", total_value);
 }
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
-        printf("Usage: %s <rod_length>\n", argv[0]); // 명령어 사용법 출력 (Print usage instruction)
+        printf("Usage: %s <rod_length>\n", argv[0]); // Print usage instruction
         return 1;
     }
 
-    int rod_length = atoi(argv[1]); // 명령줄에서 입력받은 막대 길이 (Rod length from command-line argument)
+    int rod_length = atoi(argv[1]); // Rod length from command-line argument
 
-    Piece pieces[MAX_PIECES]; // 가격표 저장 배열 (Array to store price entries)
-    int line_count = 0; // 가격표 개수 (Number of price entries)
+    Piece pieces[MAX_PIECES]; // Array to store price entries
+    int line_count = 0; // Number of price entries
 
     readStandardInput(pieces, &line_count); 
     sortCombination(pieces, line_count); 
